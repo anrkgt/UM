@@ -26,14 +26,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.RestTemplate;
 
 import com.campaign.user.mangement.usermanagement.EmbeddedMongoDbIntegrationTest;
 import com.campaign.user.mangement.usermanagement.UsermanagementApplication;
 import com.campaign.user.mangement.usermanagement.dto.UserRequestDTO;
 import com.campaign.user.mangement.usermanagement.entity.User;
+import com.campaign.user.mangement.usermanagement.exception.ErrorMessage;
 import com.mongodb.BasicDBObjectBuilder;
 import com.mongodb.DBObject;
 
