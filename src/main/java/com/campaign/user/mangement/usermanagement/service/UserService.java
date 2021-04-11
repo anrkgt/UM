@@ -1,13 +1,15 @@
 package com.campaign.user.mangement.usermanagement.service;
 
-import com.campaign.user.mangement.usermanagement.dto.UserRequestDTO;
-import com.campaign.user.mangement.usermanagement.entity.User;
-import com.campaign.user.mangement.usermanagement.repository.UserRepository;
-import org.springframework.stereotype.Service;
-
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Service;
+
+import com.campaign.user.mangement.usermanagement.entity.User;
+import com.campaign.user.mangement.usermanagement.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -36,8 +38,8 @@ public class UserService {
     }
 
     public void updateUser(User user, String id) {
-        Optional <User>  userOptional =  this.userRepository.findById(id);
-        userOptional.map( u -> this.userRepository.insert(user))
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id::" + id));
+    	User db_user =  getUserDetails(id);
+    	user.setName(db_user.getName());
+        this.userRepository.save(user);
     }
 }

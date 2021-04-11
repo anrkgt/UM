@@ -1,23 +1,32 @@
 package com.campaign.user.mangement.usermanagement.controller;
 
-import com.campaign.user.mangement.usermanagement.dto.UserRequestDTO;
-import com.campaign.user.mangement.usermanagement.entity.User;
-import com.campaign.user.mangement.usermanagement.service.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import java.util.List;
+import com.campaign.user.mangement.usermanagement.dto.UserRequestDTO;
+import com.campaign.user.mangement.usermanagement.dto.UserUpdateRequestDTO;
+import com.campaign.user.mangement.usermanagement.entity.User;
+import com.campaign.user.mangement.usermanagement.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Validated
 @RestController
@@ -40,7 +49,6 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO user){
-        ObjectMapper objectMapper = new ObjectMapper();
         User actualUser = new User();
         BeanUtils.copyProperties(user, actualUser);
         this.userService.saveUser(actualUser);
@@ -87,7 +95,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Record updated successfully"),
             @ApiResponse(responseCode = "404", description = "Record not found"),
     })
-    public void updateUser(@RequestBody User user, @PathVariable("id") String id){
-        this.userService.updateUser(user, id);
+    public void updateUser(@RequestBody UserUpdateRequestDTO user, @PathVariable("id") String id){
+    	User actualUser = new User();
+    	actualUser.setId(id);
+        BeanUtils.copyProperties(user, actualUser);
+        this.userService.updateUser(actualUser, id);
     }
 }
