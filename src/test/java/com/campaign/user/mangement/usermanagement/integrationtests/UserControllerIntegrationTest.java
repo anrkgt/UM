@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -78,11 +79,12 @@ public class UserControllerIntegrationTest {
     	usrRequestDto.setState("Maharashtra");
 		HttpEntity<UserRequestDTO> userEntity = new HttpEntity<UserRequestDTO>(usrRequestDto);
     	//When
-    	ResponseEntity<String> createUserResponse = this.testRestTemplate.exchange("/CPM/user/createUser", HttpMethod.POST,userEntity, String.class);
+    	ResponseEntity<String> createUser_Response = this.testRestTemplate.exchange("/CPM/user/createUser", HttpMethod.POST,userEntity, String.class);
 		//Then
-		assertThat(createUserResponse).isNotNull();
-		assertThat(createUserResponse.getBody()).isNotNull();
-		assertThat(createUserResponse.getBody()).isNotBlank();
+    	assertEquals(HttpStatus.OK, createUser_Response.getStatusCode());
+		assertThat(createUser_Response).isNotNull();
+		assertThat(createUser_Response.getBody()).isNotNull();
+		assertThat(createUser_Response.getBody()).isNotBlank();
 	}
     
     @Test
@@ -95,18 +97,20 @@ public class UserControllerIntegrationTest {
     	usrRequestDto.setEmail("gmail@anisa.com");
     	usrRequestDto.setState("Maharashtra");
 		HttpEntity<UserRequestDTO> userEntity = new HttpEntity<UserRequestDTO>(usrRequestDto);
-    	ResponseEntity<String> createUserResponse = this.testRestTemplate.exchange("/CPM/user/createUser", HttpMethod.POST,userEntity, String.class);
-    	String userId = createUserResponse.getBody().trim();
+    	ResponseEntity<String> createUser_Response = this.testRestTemplate.exchange("/CPM/user/createUser", HttpMethod.POST,userEntity, String.class);
+    	String userId = createUser_Response.getBody().trim();
 		
     	//When
-		ResponseEntity<User> response = this.testRestTemplate.exchange("/CPM/user/getUser/" +userId , HttpMethod.GET,null, User.class);
+		ResponseEntity<User> getUser_Response = this.testRestTemplate.exchange("/CPM/user/getUser/" +userId , HttpMethod.GET,null, User.class);
 		
 		//Then
-		User db_user = response.getBody();
-		assertThat(createUserResponse).isNotNull();
-		assertThat(createUserResponse.getBody()).isNotNull();
-		assertThat(response).isNotNull();
-		assertThat(response.getBody()).isNotNull();
+		User db_user = getUser_Response.getBody();
+		assertEquals(HttpStatus.OK, createUser_Response.getStatusCode());
+		assertThat(createUser_Response).isNotNull();
+		assertThat(createUser_Response.getBody()).isNotNull();
+		assertEquals(HttpStatus.OK, getUser_Response.getStatusCode());
+		assertThat(getUser_Response).isNotNull();
+		assertThat(getUser_Response.getBody()).isNotNull();
 		assertEquals(db_user.getPhoneNumber(), usrRequestDto.getPhoneNumber());
 		assertEquals(db_user.getName(), usrRequestDto.getName());
 		assertEquals(db_user.getAge(), usrRequestDto.getAge());
