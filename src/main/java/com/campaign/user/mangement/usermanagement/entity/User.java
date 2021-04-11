@@ -23,7 +23,6 @@ public class User {
     private String id;
 
     @Schema(description = "Name of User", required = true)
-    @NotNull(message = "Name cannot be empty")
     private String name;
 
     @Schema(description = "Phone number of User", required = true, maxLength = 10)

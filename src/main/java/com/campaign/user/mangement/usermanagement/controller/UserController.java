@@ -1,7 +1,9 @@
 package com.campaign.user.mangement.usermanagement.controller;
 
+import com.campaign.user.mangement.usermanagement.dto.UserRequestDTO;
 import com.campaign.user.mangement.usermanagement.entity.User;
 import com.campaign.user.mangement.usermanagement.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -35,9 +37,11 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User created"),
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
-    public ResponseEntity<String> createUser(@Valid @RequestBody User user){
-        this.userService.saveUser(user);
-        return new ResponseEntity<>(user.getId(), HttpStatus.OK);
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO user){
+        ObjectMapper objectMapper = new ObjectMapper();
+        User actualUser = objectMapper.convertValue(user, User.class);
+        this.userService.saveUser(actualUser);
+        return new ResponseEntity<>(actualUser.getId(), HttpStatus.OK);
     }
 
     @GetMapping("/getUser/{id}")

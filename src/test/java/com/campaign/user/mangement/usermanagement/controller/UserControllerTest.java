@@ -3,12 +3,15 @@ package com.campaign.user.mangement.usermanagement.controller;
 import com.campaign.user.mangement.usermanagement.entity.User;
 import com.campaign.user.mangement.usermanagement.service.UserService;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -60,4 +63,15 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$", Matchers.hasSize(3))).andDo(print());
     }
 
+    @Test
+    public void whenPostRequestToUsersAndInValidUser_thenCorrectResponse() throws Exception {
+        String user = "{\"name\": \"\", \"phoneNumber\": \"9800012000\", \"email\" : \"bob@domain.com\"}";
+        mockMvc.perform(MockMvcRequestBuilders.post("/CPM/user/createUser")
+                .content(user)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                //.andReturn("Please enter valid Name")
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
 }
