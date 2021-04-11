@@ -26,6 +26,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
 import org.springframework.web.client.RestTemplate;
 
 import com.campaign.user.mangement.usermanagement.EmbeddedMongoDbIntegrationTest;
@@ -85,6 +87,17 @@ public class UserControllerIntegrationTest {
 		assertThat(createUser_Response).isNotNull();
 		assertThat(createUser_Response.getBody()).isNotNull();
 		assertThat(createUser_Response.getBody()).isNotBlank();
+	}
+    
+    @Test
+	public void testBadRequest_For_CreateUser() {
+		//Given
+    	User user = new User();
+		HttpEntity<User> userEntity = new HttpEntity<User>(user);
+    	//When
+    	ResponseEntity<String> createUser_Response = this.testRestTemplate.exchange("/CPM/user/createUser", HttpMethod.POST,userEntity, String.class);
+		//Then
+    	assertEquals(HttpStatus.BAD_REQUEST, createUser_Response.getStatusCode());
 	}
     
     @Test
