@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,7 +41,8 @@ public class UserController {
     })
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequestDTO user){
         ObjectMapper objectMapper = new ObjectMapper();
-        User actualUser = objectMapper.convertValue(user, User.class);
+        User actualUser = new User();
+        BeanUtils.copyProperties(user, actualUser);
         this.userService.saveUser(actualUser);
         return new ResponseEntity<>(actualUser.getId(), HttpStatus.OK);
     }

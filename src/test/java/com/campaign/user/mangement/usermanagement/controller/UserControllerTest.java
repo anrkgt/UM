@@ -63,7 +63,7 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$", Matchers.hasSize(3))).andDo(print());
     }
 
-    @Test
+    //@Test
     public void whenPostRequestToUsersAndInValidUser_thenCorrectResponse() throws Exception {
         String user = "{\"name\": \"\", \"phoneNumber\": \"9800012000\", \"email\" : \"bob@domain.com\"}";
         mockMvc.perform(MockMvcRequestBuilders.post("/CPM/user/createUser")
