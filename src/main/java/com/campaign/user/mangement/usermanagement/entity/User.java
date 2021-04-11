@@ -59,16 +59,6 @@ public class User {
         this.name = name;
     }
 
-    public User(String id, String name, String phoneNumber, String email, int age, String address, String state) {
-        this.id = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.age = age;
-        this.address = address;
-        this.state = state;
-    }
-
 	public String getId() {
 		return id;
 	}
